@@ -2,7 +2,7 @@ import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { dirname, extname, join, normalize, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { handleRequest } from '../server/app.js';
+import { handleRequest, initializeDatabase } from '../server/app.js';
 import { toWebRequest, writeWebResponse } from '../server/adapters/node.entry.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -52,6 +52,13 @@ const environment = Object.fromEntries([
   'TURSO_AUTH_TOKEN',
   'SQLITE_PATH',
 ].map((key) => [key, process.env[key] ?? '']));
+
+try {
+  await initializeDatabase(environment);
+} catch (error) {
+  console.error(`数据库初始化失败：${error.message}`);
+  process.exit(1);
+}
 
 const contentTypes = {
   '.css': 'text/css; charset=utf-8',

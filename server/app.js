@@ -25,6 +25,10 @@ async function databaseFor(env) {
   return databasePromise;
 }
 
+export async function initializeDatabase(env = {}) {
+  return databaseFor(env);
+}
+
 router.get('/api/health', async (_request, context) => {
   const configured = await hasPassword(context.db, context.env);
   return json({ ok: true, driver: context.driver, configured });

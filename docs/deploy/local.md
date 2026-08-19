@@ -50,7 +50,7 @@ just dev
 just dev -- --port 8788
 ```
 
-开发服务器绑定 `0.0.0.0`，默认端口为 `8787`。可以用 `--port` 或 `PORT` 覆盖端口：
+开发服务器绑定 `0.0.0.0`，默认端口为 `8787`。服务器监听前会自动创建 `data/dev.sqlite` 并执行迁移；该路径相对于启动命令的当前工作目录，且 `data/` 已被 `.gitignore` 忽略，所以不会出现在 Git 变更列表中。可以用 `--port` 或 `PORT` 覆盖端口：
 
 ```bash
 node scripts/dev-server.js --port 8788
@@ -83,7 +83,18 @@ just db-seed
 | `ENCRYPTION_KEY` | 空 | 保存个人资料等敏感字段时必须设置 |
 | `AUTH_PASSWORD_HASH` | 空 | 可选，预设 PBKDF2 密码哈希 |
 
-不要把真实 `.env`、数据库文件或主密钥提交到 Git。
+不要把真实 `.env`、数据库文件或主密钥提交到 Git。检查数据库文件：
+
+```bash
+ls -lh data/dev.sqlite
+```
+
+如需自定义位置，设置 `SQLITE_PATH`（相对路径同样相对于当前工作目录）：
+
+```bash
+SQLITE_PATH=./data/local.sqlite just dev -- --port 3333
+```
+
 
 ## 4. 本地校验
 

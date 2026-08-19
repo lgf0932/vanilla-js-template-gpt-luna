@@ -3,7 +3,8 @@ import { SqliteAdapter } from './adapters/sqlite.adapter.js';
 import { TursoAdapter } from './adapters/turso.adapter.js';
 
 function envValue(env, key, fallback = '') {
-  return env?.[key] ?? globalThis.process?.env?.[key] ?? fallback;
+  const value = env?.[key] ?? globalThis.process?.env?.[key];
+  return value === '' || value === undefined || value === null ? fallback : value;
 }
 
 export async function resolveAdapter(env = {}) {
