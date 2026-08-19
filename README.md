@@ -46,7 +46,8 @@ git clone <repo-url>
 cd <repo>
 cp .env.example .env      # 按需填写，见下方环境变量说明
 just dev                  # 本地开发服务器（Node 适配器 + 本地 SQLite）
-# Docker Compose：cp docker-compose.env.example .env && just compose:up
+just dev -- --port 8788    # 指定监听端口（Just 需用 -- 传递参数）
+# Docker Compose：cp docker-compose.env.example .env && just compose-up
 ```
 
 首次启动会自动执行数据库迁移并写入初始 `app_settings`。打开浏览器访问本地地址后，会先看到统一的密码设置/输入页（鉴权系统，见下文）。如果只想快速查看或离线使用，也可以直接双击根目录的 `index.html`；文件协议模式会使用 hash 路由和浏览器本地数据，不启动后端服务。
@@ -72,14 +73,14 @@ docs/      架构决策记录与平台部署文档（deploy/）
 | 命令 | 作用 |
 |---|---|
 | `just dev` | 启动本地开发服务器 |
-| `just db:migrate` | 执行数据库迁移 |
-| `just db:seed` | 写入演示数据 |
+| `just db-migrate` | 执行数据库迁移 |
+| `just db-seed` | 写入演示数据 |
 | `just lint` | 代码规范检查（含禁用模式扫描） |
 | `just test` | 运行测试 |
-| `just i18n:check` | 校验三语言文案完整性 |
+| `just i18n-check` | 校验三语言文案完整性 |
 | `just build` | 生产构建（指纹化 + 压缩，无打包器） |
-| `just build:budget` | 体积预算校验 |
-| `just compose:up` / `compose:down` / `compose:logs` | Docker Compose 启停、日志与本地持久化部署 |
+| `just build-budget` | 体积预算校验 |
+| `just compose-up` / `compose-down` / `compose-logs` | Docker Compose 启停、日志与本地持久化部署 |
 | `just deploy-cloudflare` / `deploy-vercel` / `deploy-deno` / `deploy-docker` / `deploy-docker-compose` | 部署到对应平台或 Compose 主机 |
 
 ---
@@ -111,7 +112,7 @@ docs/      架构决策记录与平台部署文档（deploy/）
 | Vercel | `just deploy-vercel` | Turso |
 | Deno Deploy | `just deploy-deno` | Turso |
 | Docker/VPS | `just deploy-docker` | Turso（可切本地 SQLite） |
-| Docker Compose | `just compose:up` / `deploy-docker-compose` | SQLite named volume 或 Turso |
+| Docker Compose | `just compose-up` / `deploy-docker-compose` | SQLite named volume 或 Turso |
 
 完整部署步骤见 [`docs/deploy/`](./docs/deploy/)，包括 Dashboard 导入、CLI、GitHub Actions、Docker 和 Docker Compose。镜像发布分别由 `publish-image-to-ghcr.yml` 与 `publish-image-to-dockerhub.yml` 负责，远程 Compose 更新由 `deploy-docker-compose.yml` 负责，本地产物由 `package-local-artifact.yml` 负责。所有部署 workflow 均支持推送 `v*` tag 和手动触发。
 
@@ -139,7 +140,7 @@ docs/      架构决策记录与平台部署文档（deploy/）
 
 - 新增模块/子模块的标准流程（不修改壳层代码）；
 - Conventional Commits 规范，**正文必须逐文件说明改动到方法/组件级别**；
-- 提交前自检清单（lint / test / i18n:check / build:budget 全部通过）。
+- 提交前自检清单（lint / test / i18n-check / build-budget 全部通过）。
 
 ---
 

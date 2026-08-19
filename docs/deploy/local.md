@@ -7,7 +7,7 @@
 | 方式 | 需要 | 数据位置 | 适用场景 |
 |---|---|---|---|
 | 双击 `index.html` | 浏览器 | 浏览器 `localStorage`；个人资料仅保留在当前页面内存 | 快速预览、离线记录 |
-| `just dev` | Node >= 22 | `data/dev.sqlite` | 完整本地开发、API 和 SQLite |
+| `just dev` / `just dev -- --port 8788` | Node >= 22 | `data/dev.sqlite` | 完整本地开发、API 和 SQLite |
 | Docker Compose | Docker Engine + Compose v2 | Docker named volume 或 Turso | 接近生产的本地部署 |
 
 HTTP 模式和文件协议模式使用同一套前端；文件协议模式不会启动后端，也不会访问远程数据库。
@@ -46,9 +46,18 @@ node scripts/dev-server.js
 
 ```bash
 just dev
+# Just 传递参数时使用 -- 分隔
+just dev -- --port 8788
 ```
 
-开发服务器绑定 `0.0.0.0`，默认端口为 `8787`。访问：
+开发服务器绑定 `0.0.0.0`，默认端口为 `8787`。可以用 `--port` 或 `PORT` 覆盖端口：
+
+```bash
+node scripts/dev-server.js --port 8788
+PORT=8788 node scripts/dev-server.js
+```
+
+访问：
 
 ```text
 http://127.0.0.1:8787
@@ -61,7 +70,7 @@ Freebuff 或其他托管环境注入 `PORT` 时，服务器会自动使用该端
 ```bash
 node scripts/db-seed.js
 # 或
-just db:seed
+just db-seed
 ```
 
 ### 本地环境变量
@@ -112,5 +121,7 @@ GitHub Actions 的 `package-local-artifact.yml` 会在 `v*` tag 或手动触发�
 ### 端口被占用
 
 ```bash
+node scripts/dev-server.js --port 8788
+# 或
 PORT=8788 node scripts/dev-server.js
 ```

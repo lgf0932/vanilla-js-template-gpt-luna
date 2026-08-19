@@ -7,8 +7,43 @@ import { toWebRequest, writeWebResponse } from '../server/adapters/node.entry.js
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const staticRoot = root;
-const port = Number(process.env.PORT || 8787);
 const hostname = '0.0.0.0';
+const defaultPort = 8787;
+
+function parsePort(args, environmentPort) {
+  let value = environmentPort || defaultPort;
+  for (let index = 0; index < args.length; index += 1) {
+    const argument = args[index];
+    if (argument === '--port' || argument === '-p') {
+      const nextValue = args[index + 1];
+      if (!nextValue || nextValue.startsWith('-')) {
+        throw new Error('缺少端口值。用法：node scripts/dev-server.js [--port <1-65535>]');
+      }
+      value = nextValue;
+      index += 1;
+      continue;
+    }
+    if (argument.startsWith('--port=') || argument.startsWith('-p=')) {
+      value = argument.slice(argument.indexOf('=') + 1);
+      continue;
+    }
+    throw new Error(`未知参数：${argument}。用法：node scripts/dev-server.js [--port <1-65535>]`);
+  }
+
+  const port = Number(value);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+    throw new Error(`端口无效：${value}。端口必须是 1 到 65535 之间的整数。`);
+  }
+  return port;
+}
+
+let port;
+try {
+  port = parsePort(process.argv.slice(2), process.env.PORT);
+} catch (error) {
+  console.error(error.message);
+  process.exit(1);
+}
 const environment = Object.fromEntries([
   'AUTH_PASSWORD_HASH',
   'ENCRYPTION_KEY',
@@ -85,6 +120,15 @@ const server = createServer(async (request, response) => {
     response.statusCode = 500;
     response.end('Internal Server Error');
   }
+});
+
+server.on('error', (error) => {
+  if (error.code === 'EADDRINUSE') {
+    console.error(`端口 ${port} 已被占用，请改用 --port 指定其它端口。`);
+  } else {
+    console.error(error);
+  }
+  process.exitCode = 1;
 });
 
 server.listen(port, hostname, () => {

@@ -1,18 +1,18 @@
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
 # 本地开发服务器（Node 适配器 + SQLite）
-dev:
-    node scripts/dev-server.js
+dev *args:
+    node scripts/dev-server.js {{args}}
 
 # 数据库迁移
-"db:migrate":
+db-migrate:
     node scripts/db-migrate.js
 
 # 演示数据由服务启动时按需创建，保留命令面供部署脚本使用
-"db:reset":
+db-reset:
     node scripts/db-reset.js
 
-"db:seed":
+db-seed:
     node scripts/db-seed.js
 
 # 质量检查
@@ -22,17 +22,17 @@ lint:
 test:
     node --test
 
-"i18n:check":
+i18n-check:
     node scripts/i18n-check.js
 
-"deps:check":
+deps-check:
     node scripts/deps-check.js
 
 # Zero-Build 生产文件操作
 build:
     node scripts/build.js
 
-"build:budget":
+build-budget:
     node scripts/bundle-budget-check.js
 
 # 平台 CLI 仅临时调用，不写入 package.json
@@ -48,13 +48,13 @@ deploy-deno:
 deploy-docker:
     docker build -t nova-modular-app .
 
-"compose:up":
+compose-up:
     docker compose up -d --build
 
-"compose:down":
+compose-down:
     docker compose down
 
-"compose:logs":
+compose-logs:
     docker compose logs --tail=100 -f
 
 deploy-docker-compose:

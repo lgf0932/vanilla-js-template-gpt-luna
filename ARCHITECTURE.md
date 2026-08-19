@@ -370,21 +370,21 @@ export async function handleRequest(request, env) { /* server/app.js 组装的�
 
 | 分组 | 命令 | 作用 |
 |---|---|---|
-| 开发 | `just dev` | 本地开发服务器（Node 适配器 + SQLite，原生 ESM 不打包） |
-| 数据库 | `just db:migrate` / `db:reset` / `db:seed` | 迁移 / 重建 / 演示数据 |
+| 开发 | `just dev` / `just dev -- --port 8788` | 本地开发服务器（Node 适配器 + SQLite，原生 ESM 不打包；可指定端口） |
+| 数据库 | `just db-migrate` / `db-reset` / `db-seed` | 迁移 / 重建 / 演示数据 |
 | 校验 | `just lint` | 手写规则脚本（禁用模式扫描 + `node --check` 语法检查） |
-| | `just i18n:check` | 三语言 key 一致性校验 |
+| | `just i18n-check` | 三语言 key 一致性校验 |
 | | `just test` | `node --test` |
-| | `just deps:check` | 校验 `package.json` 无第三方依赖 |
+| | `just deps-check` | 校验 `package.json` 无第三方依赖 |
 | 构建 | `just build` | 产物指纹化 + 极简压缩（无打包器） |
-| | `just build:budget` | 体积预算校验 |
+| | `just build-budget` | 体积预算校验 |
 | 部署 | `just deploy-cloudflare` / `deploy-vercel` / `deploy-deno` / `deploy-docker` | 分别包装对应平台官方 CLI |
-| Compose | `just compose:up` / `compose:down` / `compose:logs` | Docker Compose 构建、启停、日志与 named volume |
+| Compose | `just compose-up` / `compose-down` / `compose-logs` | Docker Compose 构建、启停、日志与 named volume |
 | Compose 部署 | `just deploy-docker-compose` | 在已有 Docker Compose 主机启动/更新服务 |
 
 ### GitHub Actions 流水线（分文件，文档速览）
 
-- `ci.yml`：push/PR 触发，串联 `deps:check → lint → test → i18n:check → build:budget`；
+- `ci.yml`：push/PR 触发，串联 `deps-check → lint → test → i18n-check → build-budget`；
 - `deploy-cloudflare.yml`：`v*` tag push 或手动触发，执行 D1 migration + Wrangler deploy；
 - `deploy-vercel.yml`：`v*` tag push 或手动触发，执行 Turso migration + Vercel Edge deploy；
 - `deploy-deno.yml`：`v*` tag push 或手动触发，执行 Turso migration + deployctl deploy；

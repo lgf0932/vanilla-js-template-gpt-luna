@@ -26,9 +26,9 @@
 3. 在 `app/modules/registry.js` 补一行 `import()` 登记；
 4. 新建 `server/modules/<id>/routes.js` + `service.js`，在 `server/app.js` 的路由汇总处登记（同样只加一行，不改其它模块路由）；
 5. 若需要新表：新建 `server/db/migrations/000N_<module>_init.sql`，表名遵循 `[module]_[entity]`；
-6. 补齐三语言 `locales/*.json`，跑 `just i18n:check` 确认三语言 key 对齐；
+6. 补齐三语言 `locales/*.json`，跑 `just i18n-check` 确认三语言 key 对齐；
 7. 补单元测试（源码同目录 `*.test.js`），跑 `just test`；
-8. 跑 `just lint` 与 `just build:budget` 确认不超体积预算；
+8. 跑 `just lint` 与 `just build-budget` 确认不超体积预算；
 9. 提交前对照第 9 节"提交前自检清单"。
 
 ## 3. 新增一个"子模块"（二级菜单）标准流程
@@ -59,22 +59,22 @@
 
 1. 在对应模块 `locales/zh-CN.json` 新增 key（命名空间 `<module>.<scope>.<name>`）；
 2. 同步补齐 `zh-TW.json` 与 `en.json` 的同一 key；
-3. 跑 `just i18n:check`，确认三份文件 key 集合完全一致，缺一个都视为失败；
+3. 跑 `just i18n-check`，确认三份文件 key 集合完全一致，缺一个都视为失败；
 4. 壳层通用文案（按钮、通用提示等）改 `app/locales/*.json`，命名空间 `common.*`。
 
 ## 8. 性能与体积自检
 
-- 新增依赖大量代码前，先跑一次 `just build:budget`，确认当前基线；改动后再跑一次对比增量；
+- 新增依赖大量代码前，先跑一次 `just build-budget`，确认当前基线；改动后再跑一次对比增量；
 - 单模块 chunk 目标 ≤ 15KB（gzip），若超出，优先考虑：拆更小的子路由懒加载、复用公共组件而非复制代码、检查是否有未裁剪的调试代码；
 - 禁止为图方便引入整份第三方图标库/字体文件到仓库，图标走 `app/components/ui` 内已有的 SVG 图标集，新增图标需精简 SVG（去冗余属性）。
 
 ## 9. 提交前自检清单（每次提交前逐项确认）
 
-- [ ] `just deps:check` 通过（无第三方依赖）
+- [ ] `just deps-check` 通过（无第三方依赖）
 - [ ] `just lint` 通过（无禁用模式：`window.alert` 等）
 - [ ] `just test` 通过
-- [ ] `just i18n:check` 通过
-- [ ] `just build:budget` 通过（未超体积预算）
+- [ ] `just i18n-check` 通过
+- [ ] `just build-budget` 通过（未超体积预算）
 - [ ] 涉及新模块/子模块：`registry.js` 已登记，且未触碰壳层文件
 - [ ] 涉及敏感字段：已走加解密封装，未明文入库
 - [ ] 涉及 SQL：已参数化，查询集中在 `query/*.queries.js`
