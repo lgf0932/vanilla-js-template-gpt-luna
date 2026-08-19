@@ -1,0 +1,13 @@
+{
+  "settings": {
+    "eyebrow": "Nova / 设置",
+    "title": "让工作台适合你。",
+    "subtitle": "调整偏好、会话与数据边界。",
+    "tabs": { "profile": "个人资料", "display": "显示与语言", "security": "安全会话", "database": "数据库" },
+    "profile": { "title": "个人资料", "description": "资料使用信封加密保存；没有配置密钥时不会写入敏感字段。", "name": "称呼", "namePlaceholder": "例如：小 Nova", "email": "邮箱", "address": "地址（可选）", "addressPlaceholder": "仅在需要时填写" },
+    "display": { "title": "显示与语言", "description": "选择 Nova 在不同设备上的呈现方式。", "theme": "主题模式", "themeHint": "系统模式会跟随设备偏好。", "language": "语言" },
+    "security": { "title": "安全会话", "description": "登录令牌只携带过期时间与随机数，不保存原始密码。", "defaultDuration": "默认会话时长" },
+    "database": { "title": "数据库状态", "description": "Nova 通过适配器在本地 SQLite、Cloudflare D1 与 Turso 之间切换。", "driver": "当前驱动", "ready": "可用" },
+    "links": { "profile": "编辑个人资料", "display": "调整显示" }
+  }
+}

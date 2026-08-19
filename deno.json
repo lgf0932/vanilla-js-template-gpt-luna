@@ -1,0 +1,11 @@
+{
+  "tasks": {
+    "start": "deno run --allow-env --allow-net server/adapters/deno.entry.js",
+    "check": "deno check server/adapters/deno.entry.js"
+  },
+  "fmt": {
+    "lineWidth": 120,
+    "semiColons": true,
+    "singleQuote": true
+  }
+}

@@ -1,0 +1,29 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check dependencies
+        run: node scripts/deps-check.js
+      - name: Lint
+        run: node scripts/lint.js
+      - name: Test
+        run: node --test
+      - name: Check translations
+        run: node scripts/i18n-check.js
+      - name: Check bundle budget
+        run: node scripts/bundle-budget-check.js

@@ -81,6 +81,7 @@
 ├── public/                     # 静态资源（图标、favicon）
 ├── tests/                      # 端到端测试（单元测试与源码同目录 *.test.js）
 ├── docs/decisions/              # ADR（架构决策记录）
+├── docs/deploy/                 # Cloudflare / Vercel / Deno / Local / Docker / Compose 部署文档
 ├── .github/workflows/
 ├── justfile
 ├── Dockerfile
@@ -207,6 +208,13 @@
 - 每个模块自带 `locales/{zh-CN,zh-TW,en}.json`，key 采用命名空间前缀，如 `notes.title`、`notes.tags.empty`；壳层通用文案在 `app/locales/{lang}.json`，命名空间 `common.*` `sidebar.*` `auth.*`。
 - 语言包随模块懒加载一起按需拉取，不预加载全部语言。
 - `scripts/i18n-check.js`：CI 强制校验三语言文件 key 集合完全一致，任何一个模块缺翻译即 CI 失败（见第 6 节）。
+
+### 3.9 文件协议离线模式
+
+- `index.html` 的前端资源使用相对路径，因此可以直接双击以 `file://` 打开。
+- `app/core/router.js` 在文件协议下使用 URL hash 路由，避免依赖服务器 History API。
+- `app/lib/fetcher.js` 在文件协议下提供本地 API fallback：密码哈希、笔记、概览和非敏感设置存放在浏览器本地存储中；个人资料只保存在当前页面内存，不以明文落盘。
+- 通过 HTTP 访问时仍使用标准 Fetch API、Node/SQLite 或部署平台数据库，离线 fallback 不会改变服务端行为。
 
 ---
 
@@ -352,6 +360,7 @@ export async function handleRequest(request, env) { /* server/app.js 组装的�
 | Vercel | `server/adapters/vercel.entry.js` | Edge Function `export default function(req)` | Turso | `public/` 静态托管 |
 | Deno Deploy | `server/adapters/deno.entry.js` | `Deno.serve(handler)` | Turso | Deno 内置静态文件服务 |
 | Docker/VPS | `server/adapters/node.entry.js` | `node:http` → 标准 Request/Response | Turso（可显式切本地 SQLite） | 容器内置极简静态中间件 |
+| Docker Compose | `server/adapters/node.entry.js` | `node:http` → 标准 Request/Response | SQLite named volume 或 Turso | Compose 管理容器与端口 |
 
 ---
 
@@ -369,13 +378,22 @@ export async function handleRequest(request, env) { /* server/app.js 组装的�
 | | `just deps:check` | 校验 `package.json` 无第三方依赖 |
 | 构建 | `just build` | 产物指纹化 + 极简压缩（无打包器） |
 | | `just build:budget` | 体积预算校验 |
-| 部署 | `just deploy:cloudflare` / `deploy:vercel` / `deploy:deno` / `deploy:docker` | 分别包装对应平台官方 CLI |
+| 部署 | `just deploy-cloudflare` / `deploy-vercel` / `deploy-deno` / `deploy-docker` | 分别包装对应平台官方 CLI |
+| Compose | `just compose:up` / `compose:down` / `compose:logs` | Docker Compose 构建、启停、日志与 named volume |
+| Compose 部署 | `just deploy-docker-compose` | 在已有 Docker Compose 主机启动/更新服务 |
 
 ### GitHub Actions 流水线（分文件，文档速览）
 
 - `ci.yml`：push/PR 触发，串联 `deps:check → lint → test → i18n:check → build:budget`；
-- `deploy-cloudflare.yml` / `deploy-vercel.yml` / `deploy-deno.yml`：合并进 `main` 分支后各自触发对应平台部署；
-- `docker-publish.yml`：打 tag 时构建镜像并推送到 GHCR，供 VPS 端 `docker pull` + `docker compose up -d` 拉取更新。
+- `deploy-cloudflare.yml`：`v*` tag push 或手动触发，执行 D1 migration + Wrangler deploy；
+- `deploy-vercel.yml`：`v*` tag push 或手动触发，执行 Turso migration + Vercel Edge deploy；
+- `deploy-deno.yml`：`v*` tag push 或手动触发，执行 Turso migration + deployctl deploy；
+- `publish-image-to-ghcr.yml`：`v*` tag push 或手动触发，构建并推送 GHCR 镜像；
+- `publish-image-to-dockerhub.yml`：`v*` tag push 或手动触发，构建并推送 Docker Hub 镜像；
+- `deploy-docker-compose.yml`：`v*` tag push 或手动触发，构建镜像并通过部署主机凭证更新远程 Compose 服务；
+- `package-local-artifact.yml`：`v*` tag push 或手动触发，构建并上传本地静态产物压缩包。
+
+所有 workflow 的云平台 Token、数据库 Token、加密主密钥和部署主机凭证只通过 GitHub Actions Secrets/Variables 提供，不进入仓库。
 
 ---
 

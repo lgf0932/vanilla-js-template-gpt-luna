@@ -1,0 +1,33 @@
+services:
+  nova:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${NOVA_IMAGE:-nova-modular-app:local}
+    restart: unless-stopped
+    init: true
+    ports:
+      - "${NOVA_PORT:-8787}:8787"
+    environment:
+      NODE_ENV: production
+      PORT: 8787
+      DB_DRIVER: ${DB_DRIVER:-sqlite}
+      SQLITE_PATH: ${SQLITE_PATH:-/app/data/app.sqlite}
+      AUTH_PASSWORD_HASH: ${AUTH_PASSWORD_HASH:-}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?Set ENCRYPTION_KEY in .env before starting Compose}
+      TURSO_DATABASE_URL: ${TURSO_DATABASE_URL:-}
+      TURSO_AUTH_TOKEN: ${TURSO_AUTH_TOKEN:-}
+    volumes:
+      - nova_data:/app/data
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8787/api/health').then((r) => { if (!r.ok) process.exit(1); }).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+
+volumes:
+  nova_data:
+    name: ${NOVA_VOLUME:-nova_data}

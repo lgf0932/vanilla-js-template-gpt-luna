@@ -1,0 +1,12 @@
+name = "nova-modular-app"
+main = "server/adapters/cloudflare.entry.js"
+compatibility_date = "2026-08-19"
+
+[assets]
+directory = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "nova"
+database_id = "replace-with-d1-database-id"
+migrations_dir = "server/db/migrations"

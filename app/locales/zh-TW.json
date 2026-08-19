@@ -1,0 +1,6 @@
+{
+  "common": { "actions": { "enter": "進入工作台", "back": "返回首頁" } },
+  "sidebar": { "dashboard": "概覽", "notes": { "_label": "筆記", "list": "全部筆記", "tags": "標籤" }, "settings": { "_label": "設定", "profile": "個人資料", "display": "顯示與語言", "security": "安全工作階段", "database": "資料庫" } },
+  "landing": { "eyebrow": "你的個人工作台", "title": "把想法，整理成下一步。", "lead": "Nova 用清晰的模組、輕盈的互動和可靠的本地優先體驗，讓記錄、回顧與行動回到同一個節奏裡。", "start": "開始使用", "explore": "了解 Nova", "feature": { "modular": { "title": "模組化整理", "description": "筆記、設定與概覽各司其職，越用越順手。" }, "private": { "title": "私密而可靠", "description": "單密碼鑑權與加密設定，讓自託管也有安心邊界。" }, "focus": { "title": "保持輕盈", "description": "原生 Web Components 驅動，零依賴、快啟動、低負擔。" } } },
+  "auth": { "welcome": "歡迎回到你的節奏。", "intro": "一個安靜、清晰、只屬於你的工作台。", "quote": "整理不是減法，是為重要的事留出空間。", "loading": "正在準備…", "loginTitle": "進入工作台", "setupTitle": "設定管理密碼", "loginDescription": "輸入密碼繼續，你的工作階段只在選定時間內有效。", "setupDescription": "首次使用請設定一個至少 8 位的管理密碼。", "password": "管理密碼", "passwordPlaceholder": "請輸入密碼", "secureHint": "你的憑證只用於本機工作階段。", "login": "登入", "setup": "建立並進入" }
+}

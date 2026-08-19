@@ -1,0 +1,13 @@
+{
+  "settings": {
+    "eyebrow": "Nova / Settings",
+    "title": "Make the workspace yours.",
+    "subtitle": "Tune preferences, sessions, and data boundaries.",
+    "tabs": { "profile": "Profile", "display": "Display & language", "security": "Security", "database": "Database" },
+    "profile": { "title": "Profile", "description": "Profile data is envelope-encrypted; sensitive fields are not written without a key.", "name": "Name", "namePlaceholder": "For example: Nova", "email": "Email", "address": "Address (optional)", "addressPlaceholder": "Only when needed" },
+    "display": { "title": "Display & language", "description": "Choose how Nova should feel across your devices.", "theme": "Theme mode", "themeHint": "System mode follows your device preference.", "language": "Language" },
+    "security": { "title": "Security session", "description": "The login token carries only expiry data and a nonce, never the original password.", "defaultDuration": "Default session duration" },
+    "database": { "title": "Database status", "description": "Nova switches between SQLite, Cloudflare D1, and Turso through adapters.", "driver": "Current driver", "ready": "Available" },
+    "links": { "profile": "Edit profile", "display": "Adjust display" }
+  }
+}

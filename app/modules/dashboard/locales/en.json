@@ -1,0 +1,12 @@
+{
+  "dashboard": {
+    "eyebrow": "Nova / Overview",
+    "title": "Start today with clarity.",
+    "subtitle": "Keep what is happening now within reach.",
+    "newNote": "New note",
+    "metrics": { "notes": "Total notes", "modules": "Active modules", "ready": "Ready", "status": "Workspace status" },
+    "recent": { "title": "Recently updated", "all": "View all", "noContent": "No content yet" },
+    "empty": "No notes yet. Capture your first idea.",
+    "tip": { "title": "A Nova note", "description": "Catch the point in a short title, then keep context in the body.", "body": "Good organization starts with a clear next step." }
+  }
+}

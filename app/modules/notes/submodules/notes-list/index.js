@@ -1,0 +1,35 @@
+import '../../../../components/ui/ui-button.js';
+import '../../../../components/ui/ui-card.js';
+import '../../../../components/ui/ui-icon.js';
+import { api } from '../../../../lib/fetcher.js';
+import { NovaElement, defineOnce, escapeHtml } from '../../../../components/ui/base.js';
+
+class NotesListView extends NovaElement {
+  connectedCallback() { this.render(); this.load(); }
+
+  async load() {
+    try { this.items = (await api.get('/api/notes?limit=50')).items || []; } catch (error) { this.error = error.message; }
+    this.render();
+  }
+
+  render() {
+    this.shadowRoot.innerHTML = `
+      <style>
+        :host { display: block; animation: nova-fade-in var(--transition-slow) both; }
+        h1 { margin: 0; font-size: var(--font-size-xl); }
+        p { color: hsl(var(--muted-foreground)); font-size: var(--font-size-sm); }
+        .list { display: flex; flex-direction: column; gap: var(--spacing-2); margin-top: var(--spacing-6); }
+        .item { display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-3); }
+        .item ui-icon { color: hsl(var(--accent)); }
+        strong { flex: 1; font-size: var(--font-size-sm); }
+        .empty { padding: var(--spacing-6); text-align: center; color: hsl(var(--muted-foreground)); }
+      </style>
+      <section><h1>全部笔记</h1><p>按最近更新时间浏览你的记录。</p>${this.error ? `<p>${escapeHtml(this.error)}</p>` : `<div class="list">${this.items?.length ? this.items.map((item) => `<ui-card><div class="item"><ui-icon name="note"></ui-icon><strong>${escapeHtml(item.title)}</strong><span class="u-muted">${escapeHtml(new Date(item.updated_at).toLocaleDateString())}</span></div></ui-card>`).join('') : '<div class="empty"><ui-icon name="spark"></ui-icon><p>暂无笔记</p><ui-button class="create">新建笔记</ui-button></div>'}</div>`}</section>
+    `;
+    this.shadowRoot.querySelector('.create')?.addEventListener('click', () => this.context?.router?.navigate('/notes'));
+  }
+}
+
+defineOnce('notes-list-view', NotesListView);
+export function createNotesListView(context) { const view = document.createElement('notes-list-view'); view.context = context; return view; }
+export const createListView = createNotesListView;

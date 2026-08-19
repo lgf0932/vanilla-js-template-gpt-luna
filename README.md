@@ -1,6 +1,6 @@
 # Project Name
 
-> 纯 JavaScript、零第三方依赖的模块化应用架构。侧边栏 + 顶栏布局，Web Components 组件库，同构后端一份代码部署 Cloudflare / Vercel / Deno / Docker，本地 SQLite / Cloudflare D1 / Turso 自动切换。
+> 纯 JavaScript、零第三方依赖的模块化应用架构。侧边栏 + 顶栏布局，Web Components 组件库，同构后端一份代码部署 Cloudflare / Vercel / Deno / Docker / Docker Compose，本地 SQLite / Cloudflare D1 / Turso 自动切换。
 
 深入架构设计请看 [`ARCHITECTURE.md`](./ARCHITECTURE.md)；AI/开发者协作规则请看 [`AGENTS.md`](./AGENTS.md)。
 
@@ -14,7 +14,7 @@
 - **三态暗黑模式**：系统 / 浅色 / 深色，三段式胶囊切换。
 - **响应式 + 高信息密度**：移动端抽屉式侧边栏，卡片类组件严格遵循"反留白"规则。
 - **数据库自动选型**：开发环境本地 SQLite；部署到 Cloudflare 自动用 D1（可切 Turso）；部署到其它平台自动用 Turso。
-- **四平台同构部署**：Cloudflare / Vercel / Deno / Docker，后端核心代码 100% 复用。
+- **多方式同构部署**：Cloudflare / Vercel / Deno / Docker / Docker Compose，后端核心代码 100% 复用。
 - **多语言**：简体中文 / 繁体中文 / English，按模块懒加载语言包。
 - **安全默认项**：单密码全局鉴权（`X-Auth-Password`，无状态派生令牌）+ 敏感字段 AES-GCM 加密。
 - **体积/性能预算化**：首屏 JS ≤ 40KB(gzip)，单模块增量 chunk ≤ 15KB(gzip)，CI 强制校验。
@@ -46,9 +46,10 @@ git clone <repo-url>
 cd <repo>
 cp .env.example .env      # 按需填写，见下方环境变量说明
 just dev                  # 本地开发服务器（Node 适配器 + 本地 SQLite）
+# Docker Compose：cp docker-compose.env.example .env && just compose:up
 ```
 
-首次启动会自动执行数据库迁移并写入初始 `app_settings`。打开浏览器访问本地地址后，会先看到统一的密码设置/输入页（鉴权系统，见下文）。
+首次启动会自动执行数据库迁移并写入初始 `app_settings`。打开浏览器访问本地地址后，会先看到统一的密码设置/输入页（鉴权系统，见下文）。如果只想快速查看或离线使用，也可以直接双击根目录的 `index.html`；文件协议模式会使用 hash 路由和浏览器本地数据，不启动后端服务。
 
 ---
 
@@ -59,7 +60,7 @@ app/       前端 SPA（core / components / styles / lib / modules）
 server/    同构后端（core / db / modules / adapters）
 shared/    前后端共享常量与校验规则
 scripts/   开发 / 构建 / 校验脚本
-docs/      架构决策记录（ADR）
+docs/      架构决策记录与平台部署文档（deploy/）
 ```
 
 完整目录结构与每层职责说明见 [`ARCHITECTURE.md`](./ARCHITECTURE.md#2-目录结构总览)。
@@ -78,7 +79,8 @@ docs/      架构决策记录（ADR）
 | `just i18n:check` | 校验三语言文案完整性 |
 | `just build` | 生产构建（指纹化 + 压缩，无打包器） |
 | `just build:budget` | 体积预算校验 |
-| `just deploy:cloudflare` / `deploy:vercel` / `deploy:deno` / `deploy:docker` | 部署到对应平台 |
+| `just compose:up` / `compose:down` / `compose:logs` | Docker Compose 启停、日志与本地持久化部署 |
+| `just deploy-cloudflare` / `deploy-vercel` / `deploy-deno` / `deploy-docker` / `deploy-docker-compose` | 部署到对应平台或 Compose 主机 |
 
 ---
 
@@ -90,7 +92,12 @@ docs/      架构决策记录（ADR）
 | `ENCRYPTION_KEY` | 敏感字段信封加密主密钥 | 是 |
 | `DB_DRIVER` | 显式指定 `sqlite`/`d1`/`turso`，不设置则按平台自动选型 | 否 |
 | `TURSO_DATABASE_URL` / `TURSO_AUTH_TOKEN` | Turso 连接信息（Vercel/Deno/Docker 默认数据库） | 使用 Turso 时必填 |
+| `SQLITE_PATH` | SQLite 文件路径（本地或 Compose 容器内） | 否 |
 | `D1_BINDING` | Cloudflare D1 绑定名（wrangler.toml 中声明） | Cloudflare 部署时必填 |
+| `NOVA_PORT` | Docker Compose 对外端口 | 否 |
+| `NOVA_VOLUME` | Docker Compose SQLite named volume 名称 | 否 |
+| `NOVA_IMAGE` | Docker Compose 使用的镜像名/tag | 否 |
+| `DOCKERHUB_USERNAME` / `DOCKERHUB_TOKEN` | Docker Hub 发布 workflow 的凭证 | Actions Secret |
 
 数据库自动选型逻辑详见 [`ARCHITECTURE.md` 4.4 节](./ARCHITECTURE.md#44-数据库分层适配器模式--自动选型)。
 
@@ -100,12 +107,13 @@ docs/      架构决策记录（ADR）
 
 | 平台 | 命令 | 默认数据库 |
 |---|---|---|
-| Cloudflare Pages/Workers | `just deploy:cloudflare` | D1 |
-| Vercel | `just deploy:vercel` | Turso |
-| Deno Deploy | `just deploy:deno` | Turso |
-| Docker/VPS | `just deploy:docker` | Turso（可切本地 SQLite） |
+| Cloudflare Pages/Workers | `just deploy-cloudflare` | D1 |
+| Vercel | `just deploy-vercel` | Turso |
+| Deno Deploy | `just deploy-deno` | Turso |
+| Docker/VPS | `just deploy-docker` | Turso（可切本地 SQLite） |
+| Docker Compose | `just compose:up` / `deploy-docker-compose` | SQLite named volume 或 Turso |
 
-CI/CD 流水线（GitHub Actions）说明见 [`ARCHITECTURE.md` 第 6 节](./ARCHITECTURE.md#6-构建--自动化)。
+完整部署步骤见 [`docs/deploy/`](./docs/deploy/)，包括 Dashboard 导入、CLI、GitHub Actions、Docker 和 Docker Compose。镜像发布分别由 `publish-image-to-ghcr.yml` 与 `publish-image-to-dockerhub.yml` 负责，远程 Compose 更新由 `deploy-docker-compose.yml` 负责，本地产物由 `package-local-artifact.yml` 负责。所有部署 workflow 均支持推送 `v*` tag 和手动触发。
 
 ---
 

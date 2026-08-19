@@ -1,0 +1,14 @@
+.git
+.github
+.dockerignore
+data
+dist
+node_modules
+.env
+.env.*
+!docker-compose.env.example
+**/*.test.js
+docs
+README.md
+ARCHITECTURE.md
+AGENTS.md

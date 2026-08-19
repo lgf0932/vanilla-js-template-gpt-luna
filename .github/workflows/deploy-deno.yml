@@ -1,0 +1,54 @@
+name: deploy-deno
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Git ref to deploy
+        required: true
+        default: main
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
+      DENO_PROJECT: ${{ secrets.DENO_PROJECT }}
+      TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
+      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Verify source
+        run: |
+          node scripts/deps-check.js
+          node scripts/lint.js
+          node scripts/i18n-check.js
+          node --test
+          deno task check
+
+      - name: Apply Turso migrations
+        run: DB_DRIVER=turso node scripts/db-migrate.js
+
+      - name: Deploy Deno entrypoint
+        run: npx deployctl@latest deploy --project="$DENO_PROJECT" --token="$DENO_DEPLOY_TOKEN" server/adapters/deno.entry.js

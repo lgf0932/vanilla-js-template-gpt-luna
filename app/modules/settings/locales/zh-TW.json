@@ -1,0 +1,13 @@
+{
+  "settings": {
+    "eyebrow": "Nova / 設定",
+    "title": "讓工作台適合你。",
+    "subtitle": "調整偏好、工作階段與資料邊界。",
+    "tabs": { "profile": "個人資料", "display": "顯示與語言", "security": "安全工作階段", "database": "資料庫" },
+    "profile": { "title": "個人資料", "description": "資料使用信封加密保存；沒有設定金鑰時不會寫入敏感欄位。", "name": "稱呼", "namePlaceholder": "例如：小 Nova", "email": "電子郵件", "address": "地址（可選）", "addressPlaceholder": "僅在需要時填寫" },
+    "display": { "title": "顯示與語言", "description": "選擇 Nova 在不同裝置上的呈現方式。", "theme": "主題模式", "themeHint": "系統模式會跟隨裝置偏好。", "language": "語言" },
+    "security": { "title": "安全工作階段", "description": "登入權杖只攜帶到期時間與隨機數，不保存原始密碼。", "defaultDuration": "預設工作階段時長" },
+    "database": { "title": "資料庫狀態", "description": "Nova 透過配接器在本地 SQLite、Cloudflare D1 與 Turso 之間切換。", "driver": "目前驅動", "ready": "可用" },
+    "links": { "profile": "編輯個人資料", "display": "調整顯示" }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "nova-modular-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node scripts/dev-server.js",
+    "start": "node scripts/dev-server.js",
+    "db:migrate": "node scripts/db-migrate.js",
+    "lint": "node scripts/lint.js",
+    "test": "node --test",
+    "i18n:check": "node scripts/i18n-check.js",
+    "deps:check": "node scripts/deps-check.js",
+    "build": "node scripts/build.js",
+    "build:budget": "node scripts/bundle-budget-check.js"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

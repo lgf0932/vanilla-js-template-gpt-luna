@@ -1,0 +1,12 @@
+{
+  "dashboard": {
+    "eyebrow": "Nova / 概覽",
+    "title": "今天，也從清晰開始。",
+    "subtitle": "把正在發生的事，放在看得見的位置。",
+    "newNote": "新增筆記",
+    "metrics": { "notes": "筆記總數", "modules": "活躍模組", "ready": "Ready", "status": "工作台狀態" },
+    "recent": { "title": "最近更新", "all": "查看全部", "noContent": "暫無正文" },
+    "empty": "還沒有筆記，先記錄一個想法吧。",
+    "tip": { "title": "Nova 小提示", "description": "用短標題捕捉重點，再用正文留下上下文。", "body": "好的整理，從下一步足夠明確開始。" }
+  }
+}

@@ -1,0 +1,54 @@
+name: package-local-artifact
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Git ref to package
+        required: true
+        default: main
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify source
+        run: |
+          node scripts/deps-check.js
+          node scripts/lint.js
+          node scripts/i18n-check.js
+          node --test
+
+      - name: Build local static package
+        run: node scripts/build.js
+
+      - name: Archive package
+        shell: bash
+        run: |
+          name="nova-local-${GITHUB_REF_NAME:-manual}.tar.gz"
+          tar -czf "$name" -C dist .
+          echo "artifact=$name" >> "$GITHUB_ENV"
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nova-local-${{ github.run_number }}
+          path: ${{ env.artifact }}
+          if-no-files-found: error
