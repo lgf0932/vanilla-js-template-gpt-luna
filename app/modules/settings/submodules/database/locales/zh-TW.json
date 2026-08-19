@@ -1,1 +1,1 @@
-{ "settingsDatabase": { "title": "資料庫狀態", "description": "SQL-first 配接器保持業務邏輯的平台無關性。" } }
+{ "settingsDatabase": { "title": "資料庫狀態", "description": "SQL-first 配接器保持業務邏輯的平台無關性。", "driver": "目前資料庫驅動", "checking": "檢查中", "ready": "可用", "unavailable": "無法使用", "info": "遷移版本與設定快照由服務端統一維護。" } }

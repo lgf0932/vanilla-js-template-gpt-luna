@@ -6,6 +6,8 @@
     "new": "新增筆記",
     "noContent": "暫無正文",
     "badge": "已儲存",
-    "empty": "這裡還很安靜，寫下第一條筆記吧。"
+    "empty": "這裡還很安靜，寫下第一條筆記吧。",
+    "editor": { "new": "新增筆記", "edit": "編輯筆記", "title": "標題", "titlePlaceholder": "為這筆記錄一個清晰標題", "content": "內容", "contentPlaceholder": "記錄上下文、連結或下一步…", "cancel": "取消", "save": "儲存", "titleRequired": "請輸入標題" },
+    "dialog": { "deleteTitle": "刪除筆記", "deleteMessage": "確定刪除「{{title}}」嗎？此操作無法復原。", "delete": "刪除", "keep": "保留" }
   }
 }

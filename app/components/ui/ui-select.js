@@ -32,8 +32,14 @@ class UiSelect extends NovaElement {
 
   render() {
     const label = this.getAttribute('label') || '';
+    const ariaLabel = this.getAttribute('aria-label') || label;
     const selected = this.#options.find((option) => option.value === this.value) || this.#options[0] || { value: '', label: '' };
-    this.#activeIndex = Math.max(0, this.#options.findIndex((option) => option.value === selected.value));
+    const selectedIndex = this.#options.findIndex((option) => option.value === selected.value);
+    if (!this.#open) {
+      this.#activeIndex = Math.max(0, selectedIndex);
+    } else {
+      this.#activeIndex = Math.min(Math.max(0, this.#activeIndex), Math.max(0, this.#options.length - 1));
+    }
     this.shadowRoot.innerHTML = `
       <style>
         :host { position: relative; display: block; }
@@ -48,15 +54,26 @@ class UiSelect extends NovaElement {
         .option.selected { color: hsl(var(--accent)); font-weight: 700; }
       </style>
       ${label ? `<span class="label">${escapeHtml(label)}</span>` : ''}
-      <button class="trigger" type="button" aria-haspopup="listbox" aria-expanded="${this.#open}"><span>${escapeHtml(selected.label)}</span><span class="chevron ${this.#open ? 'open' : ''}">⌄</span></button>
+      <button class="trigger" type="button" aria-label="${escapeHtml(ariaLabel)}" aria-haspopup="listbox" aria-expanded="${this.#open}"><span>${escapeHtml(selected.label)}</span><span class="chevron ${this.#open ? 'open' : ''}">⌄</span></button>
       <div class="menu" role="listbox" tabindex="-1">${this.#options.map((option, index) => `<button type="button" class="option ${option.value === selected.value ? 'selected' : ''} ${index === this.#activeIndex ? 'active' : ''}" data-value="${escapeHtml(option.value)}" role="option" aria-selected="${option.value === selected.value}">${escapeHtml(option.label)}</button>`).join('')}</div>
     `;
     this.shadowRoot.querySelector('.trigger')?.addEventListener('click', () => this.toggle());
     this.shadowRoot.querySelector('.trigger')?.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); this.toggle(); }
-      if (event.key === 'Escape') { this.#open = false; this.render(); }
-      if (event.key === 'ArrowDown') { event.preventDefault(); this.#activeIndex = Math.min(this.#options.length - 1, this.#activeIndex + 1); this.#open = true; this.render(); }
-      if (event.key === 'ArrowUp') { event.preventDefault(); this.#activeIndex = Math.max(0, this.#activeIndex - 1); this.#open = true; this.render(); }
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        if (this.#open) {
+          const option = this.#options[this.#activeIndex];
+          if (option) this.choose(option);
+        } else {
+          this.toggle();
+        }
+        return;
+      }
+      if (event.key === 'Escape') { this.#open = false; this.render(); return; }
+      if (event.key === 'ArrowDown') { event.preventDefault(); this.#activeIndex = Math.min(this.#options.length - 1, this.#activeIndex + 1); this.#open = true; this.render(); return; }
+      if (event.key === 'ArrowUp') { event.preventDefault(); this.#activeIndex = Math.max(0, this.#activeIndex - 1); this.#open = true; this.render(); return; }
+      if (event.key === 'Home') { event.preventDefault(); this.#activeIndex = 0; this.#open = true; this.render(); return; }
+      if (event.key === 'End') { event.preventDefault(); this.#activeIndex = Math.max(0, this.#options.length - 1); this.#open = true; this.render(); }
     });
     this.shadowRoot.querySelectorAll('.option').forEach((option) => option.addEventListener('click', () => {
       const selectedOption = this.#options.find((item) => item.value === option.dataset.value);

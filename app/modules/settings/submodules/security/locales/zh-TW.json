@@ -1,1 +1,1 @@
-{ "settingsSecurity": { "title": "安全工作階段", "description": "權杖到期後需要重新輸入密碼。" } }
+{ "settingsSecurity": { "title": "安全工作階段", "description": "權杖到期後需要重新輸入密碼。", "notice": "原始密碼不會進入後續請求；服務端只校驗派生的 HMAC 權杖。", "duration": "預設工作階段時長", "save": "儲存偏好", "options": { "4h": "4 小時", "8h": "8 小時", "12h": "12 小時", "24h": "24 小時", "7d": "7 天", "14d": "14 天", "30d": "30 天", "90d": "90 天", "session": "直到瀏覽器關閉" } } }

@@ -1,1 +1,1 @@
-{ "settingsProfile": { "title": "个人资料", "description": "资料会使用 AES-GCM 信封加密保存。" } }
+{ "settingsProfile": { "title": "个人资料", "description": "资料会使用 AES-GCM 信封加密保存。", "name": "称呼", "email": "邮箱", "phone": "电话", "address": "地址", "save": "保存资料" } }

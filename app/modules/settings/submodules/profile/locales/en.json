@@ -1,1 +1,1 @@
-{ "settingsProfile": { "title": "Profile", "description": "Profile data is envelope-encrypted with AES-GCM." } }
+{ "settingsProfile": { "title": "Profile", "description": "Profile data is envelope-encrypted with AES-GCM.", "name": "Name", "email": "Email", "phone": "Phone", "address": "Address", "save": "Save profile" } }

@@ -6,6 +6,8 @@
     "new": "New note",
     "noContent": "No content yet",
     "badge": "Saved",
-    "empty": "It is quiet here. Write your first note."
+    "empty": "It is quiet here. Write your first note.",
+    "editor": { "new": "New note", "edit": "Edit note", "title": "Title", "titlePlaceholder": "Give this note a clear title", "content": "Content", "contentPlaceholder": "Capture context, links, or the next step…", "cancel": "Cancel", "save": "Save", "titleRequired": "Enter a title" },
+    "dialog": { "deleteTitle": "Delete note", "deleteMessage": "Delete “{{title}}”? This cannot be undone.", "delete": "Delete", "keep": "Keep" }
   }
 }

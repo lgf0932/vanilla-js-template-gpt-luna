@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "start": "deno run --allow-env --allow-net server/adapters/deno.entry.js",
+    "start": "deno run --allow-env --allow-net --allow-read server/adapters/deno.entry.js",
     "check": "deno check server/adapters/deno.entry.js"
   },
   "fmt": {

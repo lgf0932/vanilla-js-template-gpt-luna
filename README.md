@@ -44,7 +44,7 @@
 ```bash
 git clone <repo-url>
 cd <repo>
-cp .env.example .env      # 按需填写，见下方环境变量说明
+# 默认无需 .env；按需在当前 Shell 导出环境变量，见下方说明
 just dev                  # 本地开发服务器（Node 适配器 + 本地 SQLite）
 just dev -- --port 8788    # 指定监听端口（Just 需用 -- 传递参数）
 # Docker Compose：cp docker-compose.env.example .env && just compose-up

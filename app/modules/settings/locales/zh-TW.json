@@ -2,7 +2,7 @@
   "settings": {
     "eyebrow": "Nova / 設定",
     "title": "讓工作台適合你。",
-    "subtitle": "調整偏好、工作階段與資料邊界。",
+    "subtitle": "調整偏好、工作階段與資料邊界。", "saved": "設定已儲存",
     "tabs": { "profile": "個人資料", "display": "顯示與語言", "security": "安全工作階段", "database": "資料庫" },
     "profile": { "title": "個人資料", "description": "資料使用信封加密保存；沒有設定金鑰時不會寫入敏感欄位。", "name": "稱呼", "namePlaceholder": "例如：小 Nova", "email": "電子郵件", "address": "地址（可選）", "addressPlaceholder": "僅在需要時填寫" },
     "display": { "title": "顯示與語言", "description": "選擇 Nova 在不同裝置上的呈現方式。", "theme": "主題模式", "themeHint": "系統模式會跟隨裝置偏好。", "language": "語言" },

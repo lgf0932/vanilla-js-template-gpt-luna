@@ -54,16 +54,13 @@ class AuthView extends NovaElement {
       </style>
       <section class="wrap">
         <aside class="intro"><div><div class="brand"><span class="mark"><ui-icon name="spark"></ui-icon></span><span>Nova</span></div><h1>${escapeHtml(t('auth.welcome', '欢迎回到你的节奏。'))}</h1><p>${escapeHtml(t('auth.intro', '一个安静、清晰、只属于你的工作台。'))}</p></div><span class="quote">${escapeHtml(t('auth.quote', '整理不是减法，是为重要的事留出空间。'))}</span></aside>
-        <section class="form"><ui-button class="back" variant="ghost" size="sm"><ui-icon name="arrow"></ui-icon>${escapeHtml(t('common.actions.back', '返回首页'))}</ui-button><h2>${escapeHtml(loading ? t('auth.loading', '正在准备…') : configured ? t('auth.loginTitle', '进入工作台') : t('auth.setupTitle', '设置管理密码'))}</h2><p>${escapeHtml(configured ? t('auth.loginDescription', '输入密码继续，你的会话仅在选定的时间内有效。') : t('auth.setupDescription', '首次使用请设置一个至少 8 位的管理密码。'))}</p>${error ? `<div class="error">${escapeHtml(error)}</div>` : ''}${loading ? '<div class="u-muted">加载中…</div>' : `<form><ui-input name="password" type="password" label="${escapeHtml(t('auth.password', '管理密码'))}" placeholder="${escapeHtml(t('auth.passwordPlaceholder', '请输入密码'))}" required></ui-input>${configured ? '<ui-select name="duration" label="会话时长"></ui-select>' : '<ui-input name="confirm" type="password" label="确认密码" placeholder="请再次输入密码" required></ui-input>'}<div class="actions"><span class="u-muted">${escapeHtml(t('auth.secureHint', '你的凭证只用于本设备会话。'))}</span><ui-button type="submit">${escapeHtml(configured ? t('auth.login', '登录') : t('auth.setup', '创建并进入'))}<ui-icon name="arrow"></ui-icon></ui-button></div></form>`}</section>
+        <section class="form"><ui-button class="back" variant="ghost" size="sm"><ui-icon name="arrow"></ui-icon>${escapeHtml(t('common.actions.back', '返回首页'))}</ui-button><h2>${escapeHtml(loading ? t('auth.loading', '正在准备…') : configured ? t('auth.loginTitle', '进入工作台') : t('auth.setupTitle', '设置管理密码'))}</h2><p>${escapeHtml(configured ? t('auth.loginDescription', '输入密码继续，你的会话仅在选定的时间内有效。') : t('auth.setupDescription', '首次使用请设置一个至少 8 位的管理密码。'))}</p>${error ? `<div class="error">${escapeHtml(error)}</div>` : ''}${loading ? `<div class="u-muted">${escapeHtml(t('common.loading', '加载中…'))}</div>` : `<form><ui-input name="password" type="password" label="${escapeHtml(t('auth.password', '管理密码'))}" placeholder="${escapeHtml(t('auth.passwordPlaceholder', '请输入密码'))}" required></ui-input>${configured ? `<ui-select name="duration" aria-label="${escapeHtml(t('auth.duration', '会话时长'))}"></ui-select>` : `<ui-input name="confirm" type="password" label="${escapeHtml(t('auth.passwordConfirm', '确认密码'))}" placeholder="${escapeHtml(t('auth.passwordConfirmPlaceholder', '请再次输入密码'))}" required></ui-input>`}<div class="actions"><span class="u-muted">${escapeHtml(t('auth.secureHint', '你的凭证只用于本设备会话。'))}</span><ui-button type="submit">${escapeHtml(configured ? t('auth.login', '登录') : t('auth.setup', '创建并进入'))}<ui-icon name="arrow"></ui-icon></ui-button></div></form>`}</section>
       </section>
     `;
     this.shadowRoot.querySelector('.back')?.addEventListener('click', () => this.context.router.navigate('/'));
     const duration = this.shadowRoot.querySelector('ui-select');
     if (duration) {
-      duration.options = [
-        { value: '4h', label: '4 小时' }, { value: '8h', label: '8 小时' }, { value: '12h', label: '12 小时' }, { value: '24h', label: '24 小时' },
-        { value: '7d', label: '7 天' }, { value: '14d', label: '14 天' }, { value: '30d', label: '30 天' }, { value: '90d', label: '90 天' }, { value: 'session', label: '直到浏览器关闭' },
-      ];
+      duration.options = ['4h', '8h', '12h', '24h', '7d', '14d', '30d', '90d', 'session'].map((value) => ({ value, label: t(`auth.durationOptions.${value}`, value) }));
       duration.value = '24h';
     }
     this.shadowRoot.querySelector('form')?.addEventListener('submit', (event) => this.submit(event));
@@ -75,12 +72,12 @@ class AuthView extends NovaElement {
     const confirm = this.shadowRoot.querySelector('ui-input[name="confirm"]')?.value || '';
     const duration = this.shadowRoot.querySelector('ui-select')?.value || '24h';
     if (password.length < 8) {
-      this.state = { ...this.state, error: '密码至少需要 8 个字符' };
+      this.state = { ...this.state, error: this.context.i18n?.t('auth.validation.passwordLength', '密码至少需要 8 个字符') || '密码至少需要 8 个字符' };
       this.render();
       return;
     }
     if (!this.state.configured && password !== confirm) {
-      this.state = { ...this.state, error: '两次输入的密码不一致' };
+      this.state = { ...this.state, error: this.context.i18n?.t('auth.validation.passwordMismatch', '两次输入的密码不一致') || '两次输入的密码不一致' };
       this.render();
       return;
     }

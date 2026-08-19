@@ -17,6 +17,32 @@ function moduleLabel(i18n, id) {
   return i18n.t(`sidebar.${id}._label`, id);
 }
 
+function shellLabels(i18n) {
+  const t = (key, fallback) => i18n.t(key, fallback);
+  return {
+    navigation: t('common.navigation', '主导航'),
+    workspace: t('common.workspace', '工作台'),
+    close: t('common.actions.close', '关闭菜单'),
+    menu: t('common.actions.menu', '打开菜单'),
+    logout: t('common.actions.logout', '退出'),
+    loading: t('common.loading', '加载中…'),
+    pageError: t('common.errors.pageLoad', '页面加载失败'),
+    retry: t('common.errors.retry', '请稍后重试'),
+    languageLabel: t('common.language', '语言'),
+    languageOptions: [
+      { value: 'zh-CN', label: t('common.languages.zhCN', '简体中文') },
+      { value: 'zh-TW', label: t('common.languages.zhTW', '繁體中文') },
+      { value: 'en', label: t('common.languages.en', 'English') },
+    ],
+    theme: {
+      label: t('common.theme.label', '主题模式'),
+      system: t('common.theme.system', '系统'),
+      light: t('common.theme.light', '浅色'),
+      dark: t('common.theme.dark', '深色'),
+    },
+  };
+}
+
 function buildNavigation(manifests, i18n) {
   return manifests.flatMap((manifest) => [
     { path: `/${manifest.id}`, icon: manifest.icon, label: moduleLabel(i18n, manifest.id) },
@@ -39,6 +65,8 @@ export async function bootstrap() {
   const router = new AppRouter({ shell, auth, i18n });
   shell.configure({
     items: buildNavigation(manifests, i18n),
+    labels: shellLabels(i18n),
+    language: i18n.language,
     onNavigate: (path) => router.navigate(path),
     onLogout: () => { auth.logout(); router.navigate('/auth', { replace: true }); },
     onSidebarOpen: () => shell.shadowRoot.querySelector('app-sidebar')?.setOpen(true),
@@ -47,6 +75,12 @@ export async function bootstrap() {
       applyTheme(mode);
       shell.setTheme(mode);
       if (auth.isAuthenticated()) api.put('/api/settings', { display: { theme: mode } }).catch(() => {});
+    },
+    onLanguageChange: async (language) => {
+      await i18n.setLanguage(language);
+      if (auth.isAuthenticated()) {
+        await api.put('/api/settings', { display: { language } }).catch(() => {});
+      }
     },
   });
   shell.setTheme(getThemeMode());
@@ -75,7 +109,25 @@ export async function bootstrap() {
   });
   i18n.addEventListener('language-change', (event) => {
     try { localStorage.setItem('nova.language', event.detail.language); } catch {}
+    shell.setLanguage(event.detail.language);
+    shell.setLabels(shellLabels(i18n));
     shell.setNavigation(buildNavigation(manifests, i18n));
+    router.renderCurrent();
   });
-  return router.start();
+  const syncPreferences = async () => {
+    if (!auth.isAuthenticated()) return;
+    const settings = await api.get('/api/settings').catch(() => null);
+    if (!settings) return;
+    if (settings.display?.theme) {
+      applyTheme(settings.display.theme);
+      shell.setTheme(settings.display.theme);
+    }
+    if (settings.display?.language && settings.display.language !== i18n.language) {
+      await i18n.setLanguage(settings.display.language);
+    }
+  };
+  auth.addEventListener('auth-change', () => syncPreferences());
+  await router.start();
+  await syncPreferences();
+  return router;
 }

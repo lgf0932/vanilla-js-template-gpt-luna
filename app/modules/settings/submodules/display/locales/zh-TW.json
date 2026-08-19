@@ -1,1 +1,1 @@
-{ "settingsDisplay": { "title": "顯示與語言", "description": "選擇你喜歡的呈現方式。" } }
+{ "settingsDisplay": { "title": "顯示與語言", "description": "選擇你喜歡的呈現方式。", "theme": "主題模式", "themeHint": "系統、淺色或深色", "language": "語言" } }

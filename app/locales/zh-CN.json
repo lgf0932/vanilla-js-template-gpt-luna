@@ -1,6 +1,59 @@
 {
-  "common": { "actions": { "enter": "进入工作台", "back": "返回首页" } },
-  "sidebar": { "dashboard": "概览", "notes": { "_label": "笔记", "list": "全部笔记", "tags": "标签" }, "settings": { "_label": "设置", "profile": "个人资料", "display": "显示与语言", "security": "安全会话", "database": "数据库" } },
-  "landing": { "eyebrow": "你的个人工作台", "title": "把想法，整理成下一步。", "lead": "Nova 用清晰的模块、轻盈的交互和可靠的本地优先体验，让记录、复盘与行动回到同一个节奏里。", "start": "开始使用", "explore": "了解 Nova", "feature": { "modular": { "title": "模块化整理", "description": "笔记、设置与概览各司其职，越用越顺手。" }, "private": { "title": "私密而可靠", "description": "单密码鉴权与加密设置，让自托管也有安心边界。" }, "focus": { "title": "保持轻盈", "description": "原生 Web Components 驱动，零依赖、快启动、低负担。" } } },
-  "auth": { "welcome": "欢迎回到你的节奏。", "intro": "一个安静、清晰、只属于你的工作台。", "quote": "整理不是减法，是为重要的事留出空间。", "loading": "正在准备…", "loginTitle": "进入工作台", "setupTitle": "设置管理密码", "loginDescription": "输入密码继续，你的会话仅在选定的时间内有效。", "setupDescription": "首次使用请设置一个至少 8 位的管理密码。", "password": "管理密码", "passwordPlaceholder": "请输入密码", "secureHint": "你的凭证只用于本设备会话。", "login": "登录", "setup": "创建并进入" }
+  "common": {
+    "actions": {
+      "enter": "进入工作台",
+      "back": "返回首页",
+      "close": "关闭",
+      "menu": "打开菜单",
+      "logout": "退出",
+      "save": "保存",
+      "cancel": "取消",
+      "confirm": "确认","delete": "删除", "edit": "编辑", "create": "新建"
+    },
+    "navigation": "主导航",
+    "workspace": "工作台",
+    "language": "语言",
+    "languages": { "zhCN": "简体中文", "zhTW": "繁體中文", "en": "English" },
+    "loading": "加载中…",
+    "errors": { "pageLoad": "页面加载失败", "retry": "请稍后重试", "load": "加载失败", "save": "保存失败" },
+    "theme": { "label": "主题模式", "system": "系统", "light": "浅色", "dark": "深色" }
+  },
+  "sidebar": {
+    "dashboard": "概览",
+    "notes": { "_label": "笔记", "list": "全部笔记", "tags": "标签" },
+    "settings": { "_label": "设置", "profile": "个人资料", "display": "显示与语言", "security": "安全会话", "database": "数据库" }
+  },
+  "landing": {
+    "eyebrow": "你的个人工作台",
+    "title": "把想法，整理成下一步。",
+    "lead": "Nova 用清晰的模块、轻盈的交互和可靠的本地优先体验，让记录、复盘与行动回到同一个节奏里。",
+    "start": "开始使用",
+    "explore": "了解 Nova",
+    "preview": { "title": "今日概览", "status": "运行正常", "notes": "条灵感笔记", "modules": "个工作模块", "window": "专注窗口", "control": "掌控感" },
+    "feature": {
+      "modular": { "title": "模块化整理", "description": "笔记、设置与概览各司其职，越用越顺手。" },
+      "private": { "title": "私密而可靠", "description": "单密码鉴权与加密设置，让自托管也有安心边界。" },
+      "focus": { "title": "保持轻盈", "description": "原生 Web Components 驱动，零依赖、快启动、低负担。" }
+    }
+  },
+  "auth": {
+    "welcome": "欢迎回到你的节奏。",
+    "intro": "一个安静、清晰、只属于你的工作台。",
+    "quote": "整理不是减法，是为重要的事留出空间。",
+    "loading": "正在准备…",
+    "loginTitle": "进入工作台",
+    "setupTitle": "设置管理密码",
+    "loginDescription": "输入密码继续，你的会话仅在选定的时间内有效。",
+    "setupDescription": "首次使用请设置一个至少 8 位的管理密码。",
+    "password": "管理密码",
+    "passwordPlaceholder": "请输入密码",
+    "passwordConfirm": "确认密码",
+    "passwordConfirmPlaceholder": "请再次输入密码",
+    "duration": "会话时长",
+    "secureHint": "你的凭证只用于本设备会话。",
+    "login": "登录",
+    "setup": "创建并进入",
+    "validation": { "passwordLength": "密码至少需要 8 个字符", "passwordMismatch": "两次输入的密码不一致" },
+    "durationOptions": { "4h": "4 小时", "8h": "8 小时", "12h": "12 小时", "24h": "24 小时", "7d": "7 天", "14d": "14 天", "30d": "30 天", "90d": "90 天", "session": "直到浏览器关闭" }
+  }
 }

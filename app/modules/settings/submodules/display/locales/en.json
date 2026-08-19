@@ -1,1 +1,1 @@
-{ "settingsDisplay": { "title": "Display & language", "description": "Choose your preferred presentation." } }
+{ "settingsDisplay": { "title": "Display & language", "description": "Choose your preferred presentation.", "theme": "Theme mode", "themeHint": "System, light, or dark", "language": "Language" } }

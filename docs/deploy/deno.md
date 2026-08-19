@@ -1,6 +1,6 @@
 # Deno Deploy + Turso 部署
 
-Deno Deploy 入口是 `server/adapters/deno.entry.js`，该入口调用同构的 `handleRequest`。`deno.json` 提供 `deno task start` 和 `deno task check`，不包含任何第三方运行时依赖。
+Deno Deploy 入口是 `server/adapters/deno.entry.js`，该入口将 `/api/*` 转给同构的 `handleRequest`，并直接提供 `index.html`、`app/`、`public/`、`shared/` 静态资源及 SPA 回退。`deno.json` 提供 `deno task start` 和 `deno task check`，不包含任何第三方运行时依赖。
 
 生产环境默认使用 Turso；Deno Deploy 不应依赖本地 SQLite 文件。
 

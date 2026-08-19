@@ -1,1 +1,1 @@
-{ "settingsDatabase": { "title": "数据库状态", "description": "SQL-first 适配器保持业务逻辑的平台无关性。" } }
+{ "settingsDatabase": { "title": "数据库状态", "description": "SQL-first 适配器保持业务逻辑的平台无关性。", "driver": "当前数据库驱动", "checking": "检查中", "ready": "可用", "unavailable": "不可用", "info": "迁移版本与设置快照由服务端统一维护。" } }

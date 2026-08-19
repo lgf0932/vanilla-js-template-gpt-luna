@@ -21,26 +21,38 @@ class AppShell extends NovaElement {
     this.mode = 'app';
   }
 
-  configure({ items = [], onNavigate, onLogout, onSidebarOpen, onSidebarClose, onThemeChange } = {}) {
+  configure({ items = [], labels = {}, language = 'zh-CN', onNavigate, onLogout, onSidebarOpen, onSidebarClose, onThemeChange, onLanguageChange } = {}) {
     this.onNavigate = onNavigate;
     this.onLogout = onLogout;
+    this.labels = labels;
+    this.language = language;
     this.sidebar = this.shadowRoot.querySelector('app-sidebar');
     this.header = this.shadowRoot.querySelector('app-header');
     this.main = this.shadowRoot.querySelector('app-main');
     this.toast = this.shadowRoot.querySelector('ui-toast');
     this.dialog = this.shadowRoot.querySelector('ui-dialog');
+    this.sidebar.setLabels(labels);
     this.sidebar.setItems(items);
+    this.main.setLabels(labels);
+    this.header.setContext({
+      title: this.title || '工作台',
+      publicMode: this.mode === 'public',
+      theme: this.theme || 'system',
+      language,
+      labels,
+    });
     this.sidebar.addEventListener('sidebar-navigate', (event) => onNavigate?.(event.detail.path));
     this.sidebar.addEventListener('sidebar-close', () => onSidebarClose?.());
     this.header.addEventListener('sidebar-open', () => onSidebarOpen?.());
     this.header.addEventListener('logout', () => onLogout?.());
     this.header.addEventListener('theme-change', (event) => onThemeChange?.(event.detail.value));
+    this.header.addEventListener('language-change', (event) => onLanguageChange?.(event.detail.value));
   }
 
   setMode(mode) {
     this.mode = mode;
     this.shadowRoot.querySelector('.shell')?.classList.toggle('public', mode === 'public');
-    this.header?.setContext({ publicMode: mode === 'public', theme: this.theme || 'system', title: this.title || '工作台' });
+    this.header?.setContext({ publicMode: mode === 'public', theme: this.theme || 'system', language: this.language || 'zh-CN', labels: this.labels, title: this.title || '工作台' });
   }
 
   setActivePath(path) {
@@ -61,12 +73,24 @@ class AppShell extends NovaElement {
 
   setTitle(title) {
     this.title = title;
-    this.header?.setContext({ title, publicMode: this.mode === 'public', theme: this.theme || 'system' });
+    this.header?.setContext({ title, publicMode: this.mode === 'public', theme: this.theme || 'system', language: this.language || 'zh-CN', labels: this.labels });
   }
 
   setTheme(theme) {
     this.theme = theme;
-    this.header?.setContext({ title: this.title || '工作台', publicMode: this.mode === 'public', theme });
+    this.header?.setContext({ title: this.title || '工作台', publicMode: this.mode === 'public', theme, language: this.language || 'zh-CN', labels: this.labels });
+  }
+
+  setLanguage(language) {
+    this.language = language;
+    this.header?.setContext({ title: this.title || '工作台', publicMode: this.mode === 'public', theme: this.theme || 'system', language, labels: this.labels });
+  }
+
+  setLabels(labels = {}) {
+    this.labels = labels;
+    this.sidebar?.setLabels(labels);
+    this.main?.setLabels(labels);
+    this.header?.setContext({ title: this.title || '工作台', publicMode: this.mode === 'public', theme: this.theme || 'system', language: this.language || 'zh-CN', labels });
   }
 
   showToast(message, type = 'default') {

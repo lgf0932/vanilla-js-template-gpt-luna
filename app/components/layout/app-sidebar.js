@@ -4,11 +4,17 @@ class AppSidebar extends NovaElement {
   connectedCallback() {
     this.items = [];
     this.activePath = '';
+    this.labels = {};
     this.render();
   }
 
   setItems(items) {
     this.items = items || [];
+    this.render();
+  }
+
+  setLabels(labels = {}) {
+    this.labels = labels;
     this.render();
   }
 
@@ -23,6 +29,7 @@ class AppSidebar extends NovaElement {
   }
 
   render() {
+    const labels = this.labels || {};
     this.shadowRoot.innerHTML = `
       <style>
         :host { position: fixed; z-index: var(--z-sidebar); inset: var(--header-height) auto var(--spacing-0) var(--spacing-0); display: block; width: var(--sidebar-width); overflow: hidden; border-right: var(--border-width) solid hsl(var(--border)); background: hsl(var(--card)); color: hsl(var(--foreground)); transition: transform var(--transition-normal), width var(--transition-normal); }
@@ -37,7 +44,7 @@ class AppSidebar extends NovaElement {
         .close { display: none; align-self: flex-end; width: auto; }
         @media (max-width: 40rem) { :host { transform: translateX(-100%); box-shadow: var(--shadow-lg); } :host([open]) { transform: translateX(var(--spacing-0)); } .close { display: flex; } }
       </style>
-      <nav class="nav" aria-label="主导航"><button class="close" type="button" aria-label="关闭菜单"><ui-icon name="close"></ui-icon></button><span class="label">工作台</span>${this.items.map((item) => `<button type="button" data-path="${escapeHtml(item.path)}" class="${item.path === this.activePath ? 'active' : ''}${item.submodule ? ' sub' : ''}"><ui-icon name="${escapeHtml(item.icon)}"></ui-icon><span>${escapeHtml(item.label)}</span></button>`).join('')}</nav>
+      <nav class="nav" aria-label="${escapeHtml(labels.navigation || '主导航')}"><button class="close" type="button" aria-label="${escapeHtml(labels.close || '关闭菜单')}"><ui-icon name="close"></ui-icon></button><span class="label">${escapeHtml(labels.workspace || '工作台')}</span>${this.items.map((item) => `<button type="button" data-path="${escapeHtml(item.path)}" class="${item.path === this.activePath ? 'active' : ''}${item.submodule ? ' sub' : ''}"><ui-icon name="${escapeHtml(item.icon)}"></ui-icon><span>${escapeHtml(item.label)}</span></button>`).join('')}</nav>
     `;
     this.shadowRoot.querySelector('.close')?.addEventListener('click', () => this.emit('sidebar-close'));
     this.shadowRoot.querySelectorAll('[data-path]').forEach((button) => button.addEventListener('click', () => {

@@ -6,6 +6,8 @@
     "new": "新建笔记",
     "noContent": "暂无正文",
     "badge": "已保存",
-    "empty": "这里还很安静，写下第一条笔记吧。"
+    "empty": "这里还很安静，写下第一条笔记吧。",
+    "editor": { "new": "新建笔记", "edit": "编辑笔记", "title": "标题", "titlePlaceholder": "给这条记录一个清晰标题", "content": "内容", "contentPlaceholder": "记录上下文、链接或下一步…", "cancel": "取消", "save": "保存", "titleRequired": "请输入标题" },
+    "dialog": { "deleteTitle": "删除笔记", "deleteMessage": "确定删除“{{title}}”吗？此操作无法撤销。", "delete": "删除", "keep": "保留" }
   }
 }

@@ -1,1 +1,1 @@
-{ "settingsSecurity": { "title": "安全会话", "description": "令牌过期后需要重新输入密码。" } }
+{ "settingsSecurity": { "title": "安全会话", "description": "令牌过期后需要重新输入密码。", "notice": "原始密码不会进入后续请求；服务端只校验派生的 HMAC 令牌。", "duration": "默认会话时长", "save": "保存偏好", "options": { "4h": "4 小时", "8h": "8 小时", "12h": "12 小时", "24h": "24 小时", "7d": "7 天", "14d": "14 天", "30d": "30 天", "90d": "90 天", "session": "直到浏览器关闭" } } }

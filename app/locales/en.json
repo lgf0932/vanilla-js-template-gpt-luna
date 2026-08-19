@@ -1,6 +1,59 @@
 {
-  "common": { "actions": { "enter": "Enter workspace", "back": "Back home" } },
-  "sidebar": { "dashboard": "Overview", "notes": { "_label": "Notes", "list": "All notes", "tags": "Tags" }, "settings": { "_label": "Settings", "profile": "Profile", "display": "Display & language", "security": "Security", "database": "Database" } },
-  "landing": { "eyebrow": "Your personal workspace", "title": "Turn ideas into the next step.", "lead": "Nova brings notes, reflection, and action into one steady rhythm through clear modules, light interactions, and a dependable local-first experience.", "start": "Get started", "explore": "Explore Nova", "feature": { "modular": { "title": "Modular by design", "description": "Notes, settings, and overview each have a clear place." }, "private": { "title": "Private and reliable", "description": "Single-password auth and encrypted settings keep self-hosting calm." }, "focus": { "title": "Stay lightweight", "description": "Native Web Components mean zero dependencies and a fast start." } } },
-  "auth": { "welcome": "Welcome back to your rhythm.", "intro": "A quiet, clear workspace that belongs to you.", "quote": "Organization is not subtraction; it makes room for what matters.", "loading": "Getting things ready…", "loginTitle": "Enter workspace", "setupTitle": "Set an admin password", "loginDescription": "Enter your password. Your session lasts only as long as you choose.", "setupDescription": "For first use, choose an admin password with at least 8 characters.", "password": "Admin password", "passwordPlaceholder": "Enter password", "secureHint": "Your credential is used only for this device session.", "login": "Log in", "setup": "Create and enter" }
+  "common": {
+    "actions": {
+      "enter": "Enter workspace",
+      "back": "Back home",
+      "close": "Close",
+      "menu": "Open menu",
+      "logout": "Log out",
+      "save": "Save",
+      "cancel": "Cancel",
+      "confirm": "Confirm","delete": "Delete", "edit": "Edit", "create": "Create"
+    },
+    "navigation": "Main navigation",
+    "workspace": "Workspace",
+    "language": "Language",
+    "languages": { "zhCN": "Simplified Chinese", "zhTW": "Traditional Chinese", "en": "English" },
+    "loading": "Loading…",
+    "errors": { "pageLoad": "Page failed to load", "retry": "Please try again later", "load": "Loading failed", "save": "Save failed" },
+    "theme": { "label": "Theme mode", "system": "System", "light": "Light", "dark": "Dark" }
+  },
+  "sidebar": {
+    "dashboard": "Overview",
+    "notes": { "_label": "Notes", "list": "All notes", "tags": "Tags" },
+    "settings": { "_label": "Settings", "profile": "Profile", "display": "Display & language", "security": "Security", "database": "Database" }
+  },
+  "landing": {
+    "eyebrow": "Your personal workspace",
+    "title": "Turn ideas into the next step.",
+    "lead": "Nova brings notes, reflection, and action into one steady rhythm through clear modules, light interactions, and a dependable local-first experience.",
+    "start": "Get started",
+    "explore": "Explore Nova",
+    "preview": { "title": "Today's overview", "status": "All systems ready", "notes": "inspiration notes", "modules": "workspace modules", "window": "focus window", "control": "in control" },
+    "feature": {
+      "modular": { "title": "Modular by design", "description": "Notes, settings, and overview each have a clear place." },
+      "private": { "title": "Private and reliable", "description": "Single-password auth and encrypted settings keep self-hosting calm." },
+      "focus": { "title": "Stay lightweight", "description": "Native Web Components mean zero dependencies and a fast start." }
+    }
+  },
+  "auth": {
+    "welcome": "Welcome back to your rhythm.",
+    "intro": "A quiet, clear workspace that belongs to you.",
+    "quote": "Organization is not subtraction; it makes room for what matters.",
+    "loading": "Getting things ready…",
+    "loginTitle": "Enter workspace",
+    "setupTitle": "Set an admin password",
+    "loginDescription": "Enter your password. Your session lasts only as long as you choose.",
+    "setupDescription": "For first use, choose an admin password with at least 8 characters.",
+    "password": "Admin password",
+    "passwordPlaceholder": "Enter password",
+    "passwordConfirm": "Confirm password",
+    "passwordConfirmPlaceholder": "Enter the password again",
+    "duration": "Session duration",
+    "secureHint": "Your credential is used only for this device session.",
+    "login": "Log in",
+    "setup": "Create and enter",
+    "validation": { "passwordLength": "Password must be at least 8 characters", "passwordMismatch": "The passwords do not match" },
+    "durationOptions": { "4h": "4 hours", "8h": "8 hours", "12h": "12 hours", "24h": "24 hours", "7d": "7 days", "14d": "14 days", "30d": "30 days", "90d": "90 days", "session": "Until browser closes" }
+  }
 }

@@ -63,6 +63,9 @@ class UiButton extends NovaElement {
         <slot></slot>
       </button>
     `;
+    this.shadowRoot.querySelector('button')?.addEventListener('click', () => {
+      if (type === 'submit') this.closest('form')?.requestSubmit();
+    });
   }
 }
 
